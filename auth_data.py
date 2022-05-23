@@ -1,0 +1,2 @@
+group_token = 'b77ad604ce2e13bd62f7e2e4e1f6b755a00099a6423ca3a2595ff37b7587ec957160111e21521f992827b'
+personal_token = 'XXX'
