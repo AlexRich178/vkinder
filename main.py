@@ -158,6 +158,7 @@ def main_func(user_id):
     lmi = session.query(BotUsers.last_msg_id).where(BotUsers.vk_user_id == user_id)
     # слушаем события в потоке
     for event in longpoll.listen():
+        # ситуативная точка выхода
         if event.type == VkBotEventType.MESSAGE_NEW and event.from_user:
             session.query(OpenSearchData).filter(OpenSearchData.search_data_user_id == user_id).delete()
             bot_users.position = 0
@@ -215,23 +216,20 @@ def main_func(user_id):
                     msg_edit(
                         user_id=user_id,
                         msg_id=lmi,
-                        message=(
-                            user_name(oud[bot_users.position][0]),
-                            f'\nhttps://vk.com/id{oud[bot_users.position][0]}'),
+                        message=(user_name(oud[bot_users.position][0]),
+                                 f'\nhttps://vk.com/id{oud[bot_users.position][0]}'),
                         keyboard=keyboard_7.get_keyboard(),
                         attachment=three_photos(bot_users.position, oud))
             if event.object.payload.get('type') == 'back':
                 bot_users.position -= 1
                 session.commit()
                 if bot_users.position in range(1, len(oud) + 1):
-                    msg_edit(
-                        user_id=user_id,
-                        msg_id=lmi,
-                        message=(
-                            user_name(oud[bot_users.position]),
-                            f'\nhttps://vk.com/id{oud[bot_users.position][0]}'),
-                        keyboard=keyboard_5.get_keyboard(),
-                        attachment=three_photos(bot_users.position, oud))
+                    msg_edit(user_id=user_id,
+                             msg_id=lmi,
+                             message=(user_name(oud[bot_users.position]),
+                                      f'\nhttps://vk.com/id{oud[bot_users.position][0]}'),
+                             keyboard=keyboard_5.get_keyboard(),
+                             attachment=three_photos(bot_users.position, oud))
                 elif bot_users.position == 0:
                     msg_edit(
                         user_id=user_id,

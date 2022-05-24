@@ -21,7 +21,6 @@ class BotUsers(Base):
     position = sq.Column('position', sq.Integer)
 
 
-
 class SearchingParams(Base):
     __tablename__ = 'SearchingParams'
 
